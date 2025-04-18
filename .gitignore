@@ -1,11 +1,22 @@
 # Prerequisites
 *.d
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
 # Compiled Object files
 *.slo
+*.sln
 *.lo
 *.o
 *.obj
+*.idb
+*.illk
+*.ilk
+*.pdb
+*.tlog
+*.lastbuildstate
+*.log
 
 # Precompiled Headers
 *.gch
@@ -28,5 +39,6 @@
 
 # Executables
 *.exe
+*.exe.recipe
 *.out
 *.app
