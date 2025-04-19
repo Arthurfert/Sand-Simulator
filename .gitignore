@@ -3,6 +3,9 @@
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.json
+*.vsidx
+*.vc.opendb
 
 # Compiled Object files
 *.slo
@@ -17,10 +20,15 @@
 *.tlog
 *.lastbuildstate
 *.log
+*.suo
+*.db
+*.db-shm
+*.db-wal
 
 # Precompiled Headers
 *.gch
 *.pch
+*.ipch
 
 # Compiled Dynamic libraries
 *.so
