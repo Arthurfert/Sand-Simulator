@@ -19,6 +19,20 @@ void Table::update() {
                 grid[y][x] = 0;
                 grid[y + 1][x] = 1;
             }
+            else if (grid[y][x] == 1 && x > 0 && grid[y + 1][x - 1] == 0) {
+                // Déplace la particule de sable vers le bas à gauche
+                grid[y][x] = 0;
+                grid[y + 1][x - 1] = 1;
+            }
+            else if (grid[y][x] == 1 && x < width - 1 && grid[y + 1][x + 1] == 0) {
+                // Déplace la particule de sable vers le bas à droite
+                grid[y][x] = 0;
+                grid[y + 1][x + 1] = 1;
+            }
+            else if (grid[y][x] == 1 && grid[y + 1][x] == 1) {
+                // Si la particule de sable est bloquée, elle reste en place
+                continue;
+            }
         }
     }
 }
