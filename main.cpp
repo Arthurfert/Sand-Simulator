@@ -1,9 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Table.h"
+#include "Mouse.h"
 
 int main() {
-    int width = 500, height = 500, cellSize = 1;
+    int width = 100, height = 100, cellSize = 1;
     std::cout << "Bienvenue dans la simulation de sable !" << std::endl;
     std::cout << "Veuillez entrer la largeur du tableau : ";
     std::cin >> width;
@@ -11,16 +12,10 @@ int main() {
     std::cin >> height;
 
     Table table(width, height);
-
-    // Ajout de particules de sable pour tester
-    table.addSable(10, 0);
-    table.addSable(10, 1);
-    table.addSable(10, 2);
-    table.addSable(11, 0);
-    table.addSable(11, 1);
+    Mouse mouse;
 
     // Création de la fenêtre SFML
-    sf::RenderWindow window(sf::VideoMode(width * cellSize, height * cellSize), "Simulation de sable");
+    sf::RenderWindow window(sf::VideoMode(width, height), "Simulation de sable");
     window.setFramerateLimit(60);
 
     // Boucle principale
@@ -29,6 +24,17 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+        }
+
+        // Met à jour la position de la souris
+        mouse.update(window);
+
+        // Ajoute du sable à la position de la souris si le bouton gauche est enfoncé
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+            if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
+                table.addSable(gridPos.x, gridPos.y);
+            }
         }
 
         // Met à jour la simulation
