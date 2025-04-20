@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <random>
 #include "Table.h"
 #include "Mouse.h"
 
@@ -32,16 +33,47 @@ int main() {
         // Ajoute du sable avec un clic gauche
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
-            if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
-                table.addSable(gridPos.x, gridPos.y);
+
+            // Définir une zone autour de la position de la souris
+            int zoneSize = 3; // Taille de la zone (par exemple, 3x3 autour de la souris)
+
+            // Générateur de nombres aléatoires
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<> distX(-zoneSize, zoneSize);
+            std::uniform_int_distribution<> distY(-zoneSize, zoneSize);
+
+            // Générer plusieurs particules dans la zone
+            for (int i = 0; i < 5; ++i) { // Par exemple, 5 particules par clic
+                int offsetX = distX(gen);
+                int offsetY = distY(gen);
+
+                int newX = gridPos.x + offsetX;
+                int newY = gridPos.y + offsetY;
+
+                // Vérifie que la position générée est dans les limites de la grille
+                if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                    table.addSable(newX, newY);
+                }
             }
         }
 
         // Ajoute un obstacle avec un clic droit
         if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
             sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+
+            // Vérifie que la position centrale est dans les limites de la grille
             if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
-                table.addObstacle(gridPos.x, gridPos.y);
+                // Ajoute un bloc de 2 pixels de large
+                for (int offset = 0; offset < 2; ++offset) {
+                    int newX = gridPos.x + offset;
+                    int newY = gridPos.y + offset;
+                    // Vérifie que la position générée est dans les limites de la grille
+                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                        // Ajoute un obstacle à la position générée
+                        table.addObstacle(newX, newY);
+                    }
+                }
             }
         }
 
