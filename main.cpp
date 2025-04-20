@@ -12,6 +12,7 @@ int main() {
     std::cout << "Utilisez la souris pour interagir avec le tableau :" << std::endl;
     std::cout << "Ajouter du sable avec un clic gauche." << std::endl;
     std::cout << "Ajouter un obstacle avec un clic droit." << std::endl;
+    std::cout << "Appuyez sur 'C' (clear) pour effacer le tableau." << std::endl;
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "Veuillez entrer la largeur du tableau : ";
     std::cin >> width;
@@ -31,6 +32,11 @@ int main() {
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            // Detecte la pression de la touche 'C' pour effacer le tableau
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::C) {
+                table.clear(); // Efface le tableau
+            }
         }
 
         // Met à jour la position de la souris
