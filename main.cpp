@@ -25,7 +25,8 @@ int main() {
     // Création de la fenêtre SFML
     sf::RenderWindow window(sf::VideoMode(width, height), "Simulation de sable");
     window.setFramerateLimit(60);
-
+    
+    int nbFrame=0; // Compteur de frames
     // Boucle principale
     while (window.isOpen()) {
         sf::Event event;
@@ -56,7 +57,7 @@ int main() {
             std::uniform_int_distribution<> distY(-zoneSize, zoneSize);
 
             // Générer plusieurs particules dans la zone
-            for (int i = 0; i < 5; ++i) { // Par exemple, 5 particules par clic
+            for (int i = 0; i < 5; ++i) { // 5 particules par clic
                 int offsetX = distX(gen);
                 int offsetY = distY(gen);
 
@@ -90,7 +91,7 @@ int main() {
         }
 
         // Met à jour la simulation
-        table.update();
+        table.update(nbFrame);
 
         // Efface la fenêtre
         window.clear(sf::Color::Black);
