@@ -12,7 +12,8 @@ int main() {
     std::cout << "Utilisez la souris pour interagir avec le tableau :" << std::endl;
     std::cout << "Ajouter du sable avec un clic gauche." << std::endl;
     std::cout << "Ajouter un obstacle avec un clic droit." << std::endl;
-    std::cout << "Appuyez sur 'C' (clear) pour effacer le tableau." << std::endl;
+    std::cout << "Appuyez sur 'd' (delete) pour effacer le tableau." << std::endl;
+    std::cout << "Appuyez sur 'c' pour changer le type de particules (sable ou bulle)." << std::endl;
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "Veuillez entrer la largeur du tableau : ";
     std::cin >> width;
@@ -26,7 +27,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(width, height), "Simulation de sable");
     window.setFramerateLimit(60);
     
-    int nbFrame=0; // Compteur de frames
+    bool type = true; // Type de particule (false = bulle, true = sable)
     // Boucle principale
     while (window.isOpen()) {
         sf::Event event;
@@ -35,38 +36,55 @@ int main() {
                 window.close();
 
             // Detecte la pression de la touche 'C' pour effacer le tableau
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::C) {
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::d) {
                 table.clear(); // Efface le tableau
+            }
+
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::c) {
+                type = !type; // Change le type de particules
             }
         }
 
         // Met à jour la position de la souris
         mouse.update(window);
 
-        // Ajoute du sable avec un clic gauche
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+        if (type){
+            // Ajoute du sable avec un clic gauche
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
 
-            // Définir une zone autour de la position de la souris
-            int zoneSize = 3; // Taille de la zone (par exemple, 3x3 autour de la souris)
+                // Définir une zone autour de la position de la souris
+                int zoneSize = 3; // Taille de la zone (par exemple, 3x3 autour de la souris)
 
-            // Générateur de nombres aléatoires
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::uniform_int_distribution<> distX(-zoneSize, zoneSize);
-            std::uniform_int_distribution<> distY(-zoneSize, zoneSize);
+                // Générateur de nombres aléatoires
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<> distX(-zoneSize, zoneSize);
+                std::uniform_int_distribution<> distY(-zoneSize, zoneSize);
 
-            // Générer plusieurs particules dans la zone
-            for (int i = 0; i < 5; ++i) { // 5 particules par clic
-                int offsetX = distX(gen);
-                int offsetY = distY(gen);
+                // Générer plusieurs particules dans la zone
+                for (int i = 0; i < 5; ++i) { // 5 particules par clic
+                    int offsetX = distX(gen);
+                    int offsetY = distY(gen);
 
-                int newX = gridPos.x + offsetX;
-                int newY = gridPos.y + offsetY;
+                    int newX = gridPos.x + offsetX;
+                    int newY = gridPos.y + offsetY;
 
-                // Vérifie que la position générée est dans les limites de la grille
-                if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                    table.addSable(newX, newY);
+                    // Vérifie que la position générée est dans les limites de la grille
+                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                        table.addSable(newX, newY);
+                    }
+                }
+            }
+        } else {
+            // Ajoute une bulle avec un clic gauche
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+
+                // Vérifie que la position centrale est dans les limites de la grille
+                if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
+                    // Ajoute une bulle à la position générée
+                    table.addBubble(gridPos.x, gridPos.y);
                 }
             }
         }
@@ -78,7 +96,7 @@ int main() {
             // Vérifie que la position centrale est dans les limites de la grille
             if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
                 // Ajoute un bloc de 2 pixels de large
-                for (int offset = 0; offset < 2; ++offset) {
+                for (int offset = 0; offset < 3; ++offset) {
                     int newX = gridPos.x + offset;
                     int newY = gridPos.y + offset;
                     // Vérifie que la position générée est dans les limites de la grille

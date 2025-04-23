@@ -20,6 +20,12 @@ void Table::addObstacle(int x, int y) {
     }
 }
 
+void Table::addBubble(int x, int y) {
+    if (x >= 0 && x < width && y >= 0 && y < height && grid[y][x] == 1) {
+        grid[y][x] = 0; // Ajoute une bulle
+    }
+}
+
 void Table::update() {
     std::random_device rd;
     std::mt19937 gen(rd());
