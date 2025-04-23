@@ -61,7 +61,8 @@ void Table::updateSand() {
 void Table::updateBubble() {
     std::random_device rd;
     std::mt19937 gen(rd());
-    for (int y = 0; y <= height-2; ++y) { // Process rows from bottom to top
+
+    for (int y = 1; y < height; ++y) { // Process rows from top to bottom
         // Create a shuffled list of column indices
         std::vector<int> columns(width);
         std::iota(columns.begin(), columns.end(), 0); // Fill with 0, 1, ..., width-1
@@ -69,20 +70,17 @@ void Table::updateBubble() {
 
         for (int x : columns) { // Process columns in random order
             if (grid[y][x] == 3) { // If a bubble is present
-                // Check if the bubble can rise straight up
-                if (y - 1 >= 0 && grid[y - 1][x] == 1) {
-                    grid[y][x] = 1;
-                    grid[y - 1][x] = 3;
-                }
-                // Check if the bubble can rise up-left
-                else if (y - 1 >= 0 && x > 0 && grid[y - 1][x - 1] == 1) {
-                    grid[y][x] = 1;
-                    grid[y - 1][x - 1] = 3;
-                }
-                // Check if the bubble can rise up-right
-                else if (y - 1 >= 0 && x < width - 1 && grid[y - 1][x + 1] == 1) {
-                    grid[y][x] = 1;
-                    grid[y - 1][x + 1] = 3;
+                // Generate a random direction: -1 (up-left), 0 (up), or 1 (up-right)
+                std::uniform_int_distribution<> dist(-1, 1);
+                int direction = dist(gen);
+                // Calculate the new position based on the direction
+                int newX = x + direction;
+                int newY = y - 1;
+
+                // Check if the new position is within bounds and empty
+                if (newY >= 0 && newX >= 0 && newX < width && grid[newY][newX] == 1) {
+                    grid[y][x] = 1;       // Clear the current position
+                    grid[newY][newX] = 3; // Move the bubble to the new position
                 }
             }
         }

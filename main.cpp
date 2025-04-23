@@ -126,7 +126,7 @@ int main() {
                 } else if (table.getGrid()[y][x] == 2) {
                     cell.setFillColor(sf::Color(128, 128, 128)); // Obstacle
                 } else if (table.getGrid()[y][x] == 3) {
-                    cell.setFillColor(sf::Color(0, 0, 255)); // Bulle
+                    cell.setFillColor(sf::Color(0, 0, 0)); // Bulle
                 } else {
                     continue; // Cellule vide
                 }
