@@ -48,6 +48,25 @@ int main() {
         // Met à jour la position de la souris
         mouse.update(window);
 
+        // Ajoute un obstacle avec un clic droit
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
+            sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+
+            // Vérifie que la position centrale est dans les limites de la grille
+            if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
+                // Ajoute un bloc de 2 pixels de large
+                for (int offset = 0; offset < 3; ++offset) {
+                    int newX = gridPos.x + offset;
+                    int newY = gridPos.y + offset;
+                    // Vérifie que la position générée est dans les limites de la grille
+                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                        // Ajoute un obstacle à la position générée
+                        table.addObstacle(newX, newY);
+                    }
+                }
+            }
+        }
+
         if (type){
             // Ajoute du sable avec un clic gauche
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -76,6 +95,8 @@ int main() {
                     }
                 }
             }
+            // Met à jour la simulation
+            table.updateSand();
         } else {
             // Ajoute une bulle avec un clic gauche
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -87,29 +108,9 @@ int main() {
                     table.addBubble(gridPos.x, gridPos.y);
                 }
             }
+            // Met à jour la simulation
+            table.updateBubble();
         }
-
-        // Ajoute un obstacle avec un clic droit
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-            sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
-
-            // Vérifie que la position centrale est dans les limites de la grille
-            if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
-                // Ajoute un bloc de 2 pixels de large
-                for (int offset = 0; offset < 3; ++offset) {
-                    int newX = gridPos.x + offset;
-                    int newY = gridPos.y + offset;
-                    // Vérifie que la position générée est dans les limites de la grille
-                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                        // Ajoute un obstacle à la position générée
-                        table.addObstacle(newX, newY);
-                    }
-                }
-            }
-        }
-
-        // Met à jour la simulation
-        table.update();
 
         // Efface la fenêtre
         window.clear(sf::Color::Black);
@@ -124,8 +125,10 @@ int main() {
                     cell.setFillColor(sf::Color::Yellow); // Sable
                 } else if (table.getGrid()[y][x] == 2) {
                     cell.setFillColor(sf::Color(128, 128, 128)); // Obstacle
+                } else if (table.getGrid()[y][x] == 3) {
+                    cell.setFillColor(sf::Color(0, 0, 255)); // Bulle
                 } else {
-                    continue; // Vide
+                    continue; // Cellule vide
                 }
 
                 window.draw(cell);
