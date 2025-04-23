@@ -36,11 +36,11 @@ int main() {
                 window.close();
 
             // Detecte la pression de la touche 'C' pour effacer le tableau
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::d) {
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
                 table.clear(); // Efface le tableau
             }
 
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::c) {
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::C) {
                 type = !type; // Change le type de particules
             }
         }
