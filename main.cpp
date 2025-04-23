@@ -91,7 +91,7 @@ int main() {
         }
 
         // Met à jour la simulation
-        table.update(nbFrame);
+        table.update();
 
         // Efface la fenêtre
         window.clear(sf::Color::Black);

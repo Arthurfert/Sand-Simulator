@@ -1,5 +1,8 @@
 #include "Table.h"
 #include <iostream>
+#include <algorithm> // For std::shuffle
+#include <random>    // For random number generation
+#include <numeric>   // For std::iota
 
 Table::Table(int width, int height) : width(width), height(height) {
     grid = std::vector<std::vector<int>>(height, std::vector<int>(width, 0));
@@ -17,38 +20,32 @@ void Table::addObstacle(int x, int y) {
     }
 }
 
-void Table::update(int nbFrame) {
-    for (int y = height - 2; y >= 0; --y) { // Parcours de bas en haut
-        for (int x = 0; x < width; ++x) {
-            if (grid[y][x] == 1) { // Si une particule de sable est présente
-                // Vérifie si la particule peut descendre
-                if (grid[y + 1][x] == 0) {
-                    // Déplace la particule de sable vers le bas
+void Table::update() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    for (int y = height - 2; y >= 0; --y) { // Process rows from bottom to top
+        // Create a shuffled list of column indices
+        std::vector<int> columns(width);
+        std::iota(columns.begin(), columns.end(), 0); // Fill with 0, 1, ..., width-1
+        std::shuffle(columns.begin(), columns.end(), gen);
+
+        for (int x : columns) { // Process columns in random order
+            if (grid[y][x] == 1) { // If a sand particle is present
+                // Check if the particle can fall straight down
+                if (y + 1 < height && grid[y + 1][x] == 0) {
                     grid[y][x] = 0;
                     grid[y + 1][x] = 1;
                 }
-                else {
-                    if (nbFrame%2 == 0) {
-                        if (x > 0 && grid[y + 1][x - 1] == 0) {
-                            // Déplace la particule de sable vers le bas à gauche
-                            grid[y][x] = 0;
-                            grid[y + 1][x - 1] = 1;
-                        } else if (x < width - 1 && grid[y + 1][x + 1] == 0) {
-                            // Déplace la particule de sable vers le bas à droite
-                            grid[y][x] = 0;
-                            grid[y + 1][x + 1] = 1;
-                        }
-                    } else {
-                        if (x < width - 1 && grid[y + 1][x + 1] == 0) {
-                            // Déplace la particule de sable vers le bas à droite
-                            grid[y][x] = 0;
-                            grid[y + 1][x + 1] = 1;
-                        } else if (x > 0 && grid[y + 1][x - 1] == 0) {
-                            // Déplace la particule de sable vers le bas à gauche
-                            grid[y][x] = 0;
-                            grid[y + 1][x - 1] = 1;
-                        }
-                    };
+                // Check if the particle can fall down-left
+                else if (y + 1 < height && x > 0 && grid[y + 1][x - 1] == 0) {
+                    grid[y][x] = 0;
+                    grid[y + 1][x - 1] = 1;
+                }
+                // Check if the particle can fall down-right
+                else if (y + 1 < height && x < width - 1 && grid[y + 1][x + 1] == 0) {
+                    grid[y][x] = 0;
+                    grid[y + 1][x + 1] = 1;
                 }
             }
         }
