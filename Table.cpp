@@ -108,6 +108,12 @@ const std::vector<std::vector<int>>& Table::getGrid() const {
     return grid;
 }
 
+void Table::clearCell(int x, int y) {
+    if (x >= 0 && x < width && y >= 0 && y < height) {
+        grid[y][x] = 0; // Clear the specific cell
+    }
+}
+
 void Table::clear() {
     for (auto& row : grid) {
         std::fill(row.begin(), row.end(), 0); // Set all cells to 0 (empty)

@@ -14,6 +14,7 @@ int main() {
     std::cout << "Ajouter un obstacle avec un clic droit." << std::endl;
     std::cout << "Appuyez sur 'd' (delete) pour effacer le tableau." << std::endl;
     std::cout << "Appuyez sur 'c' pour changer le type de particules (sable ou bulle)." << std::endl;
+    std::cout << "Appuyez sur 'g' pour activer/désactiver la gomme." << std::endl;
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "Veuillez entrer la largeur du tableau : ";
     std::cin >> width;
@@ -28,6 +29,7 @@ int main() {
     window.setFramerateLimit(60);
     
     bool type = true; // Type de particule (false = bulle, true = sable)
+    bool gomme = false; // Gomme activé ou non (false = non, true = oui)
     // Boucle principale
     while (window.isOpen()) {
         sf::Event event;
@@ -42,6 +44,9 @@ int main() {
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::C) {
                 type = !type; // Change le type de particules
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G) {
+                gomme = !gomme; // Active ou désactive la gomme
             }
         }
 
@@ -67,49 +72,63 @@ int main() {
             }
         }
 
-        if (type){
-            // Ajoute du sable avec un clic gauche
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
-
-                // Définir une zone autour de la position de la souris
-                int zoneSize = 3; // Taille de la zone (par exemple, 3x3 autour de la souris)
-
-                // Générateur de nombres aléatoires
-                std::random_device rd;
-                std::mt19937 gen(rd());
-                std::uniform_int_distribution<> distX(-zoneSize, zoneSize);
-                std::uniform_int_distribution<> distY(-zoneSize, zoneSize);
-
-                // Générer plusieurs particules dans la zone
-                for (int i = 0; i < 5; ++i) { // 5 particules par clic
-                    int offsetX = distX(gen);
-                    int offsetY = distY(gen);
-
-                    int newX = gridPos.x + offsetX;
-                    int newY = gridPos.y + offsetY;
-
-                    // Vérifie que la position générée est dans les limites de la grille
-                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                        table.addSable(newX, newY);
-                    }
-                }
-            }
-            // Met à jour la simulation
-            table.updateSand();
-        } else {
-            // Ajoute une bulle avec un clic gauche
+        if (gomme) {
+            // Efface une cellule avec un clic gauche
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
 
                 // Vérifie que la position centrale est dans les limites de la grille
                 if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
-                    // Ajoute une bulle à la position générée
-                    table.addBubble(gridPos.x, gridPos.y);
+                    // Efface la cellule à la position générée
+                    table.clearCell(gridPos.x, gridPos.y);
                 }
             }
-            // Met à jour la simulation
-            table.updateBubble();
+            table.updateSand();
+        } else {
+            if (type){
+                // Ajoute du sable avec un clic gauche
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+
+                    // Définir une zone autour de la position de la souris
+                    int zoneSize = 3; // Taille de la zone (par exemple, 3x3 autour de la souris)
+
+                    // Générateur de nombres aléatoires
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_int_distribution<> distX(-zoneSize, zoneSize);
+                    std::uniform_int_distribution<> distY(-zoneSize, zoneSize);
+
+                    // Générer plusieurs particules dans la zone
+                    for (int i = 0; i < 5; ++i) { // 5 particules par clic
+                        int offsetX = distX(gen);
+                        int offsetY = distY(gen);
+
+                        int newX = gridPos.x + offsetX;
+                        int newY = gridPos.y + offsetY;
+
+                        // Vérifie que la position générée est dans les limites de la grille
+                        if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                            table.addSable(newX, newY);
+                        }
+                    }
+                }
+                // Met à jour la simulation
+                table.updateSand();
+            } else {
+                // Ajoute une bulle avec un clic gauche
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+
+                    // Vérifie que la position centrale est dans les limites de la grille
+                    if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
+                        // Ajoute une bulle à la position générée
+                        table.addBubble(gridPos.x, gridPos.y);
+                    }
+                }
+                // Met à jour la simulation
+                table.updateBubble();
+            }
         }
 
         // Efface la fenêtre

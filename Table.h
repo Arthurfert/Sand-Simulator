@@ -12,6 +12,7 @@ public:
     void updateSand();
     void updateBubble();
     void display() const;
+    void clearCell(int x, int y); // Clears a specific cell
     void clear(); // Clears the table
 
     const std::vector<std::vector<int>>& getGrid() const;
