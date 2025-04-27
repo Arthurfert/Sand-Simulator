@@ -6,6 +6,7 @@
 *.json
 *.vsidx
 *.vc.opendb
+*.cd
 
 # Compiled Object files
 *.slo
