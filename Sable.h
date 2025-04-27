@@ -1,14 +1,14 @@
 #pragma once
+#include "Particule.h"
 
-class Sable {
+class Sable : public Particule {
 public:
-    Sable(); // Constructeur par défaut
-    Sable(int x, int y); // Constructeur avec position
-    int getX() const; // Accesseur pour la position X
-    int getY() const; // Accesseur pour la position Y
-    void setPosition(int x, int y); // Mutateur pour la position
+    Sable(int x = 0, int y = 0); // Default and parameterized constructor
+    int getX() const;
+    int getY() const;
+    void setPosition(int x, int y);
 
 private:
-    int x; // Position X de la particule
-    int y; // Position Y de la particule
+    int x;
+    int y;
 };

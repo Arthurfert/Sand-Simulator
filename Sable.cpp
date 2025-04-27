@@ -1,7 +1,5 @@
 #include "Sable.h"
 
-Sable::Sable() : x(0), y(0) {}
-
 Sable::Sable(int x, int y) : x(x), y(y) {}
 
 int Sable::getX() const {

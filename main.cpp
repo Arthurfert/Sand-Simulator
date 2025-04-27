@@ -3,6 +3,7 @@
 #include <random>
 #include "Table.h"
 #include "Mouse.h"
+#include "Particule.h"
 
 int main() {
     int width = 150, height = 150, cellSize = 1; // Paramètres par défaut
@@ -140,17 +141,21 @@ int main() {
             for (int x = 0; x < width; ++x) {
                 // Crée un rectangle pour chaque cellule de la grille
                 sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
-                cell.setPosition(x, y);
-                // Défini la couleur de la cellule en fonction de son état
-                if (table.getGrid()[y][x] == 1) {
+                cell.setPosition(static_cast<float>(x * cellSize), static_cast<float>(y * cellSize));
+
+                // Défini la couleur de la cellule en fonction de son contenu
+                auto& cellContent = table.getGrid()[y][x];
+                if (cellContent && dynamic_cast<Sable*>(cellContent.get())) {
                     cell.setFillColor(sf::Color::Yellow); // Sable
-                } else if (table.getGrid()[y][x] == 2) {
+                } else if (cellContent && dynamic_cast<Obstacle*>(cellContent.get())) {
                     cell.setFillColor(sf::Color(128, 128, 128)); // Obstacle
-                } else if (table.getGrid()[y][x] == 3) {
-                    cell.setFillColor(sf::Color(0, 0, 0)); // Bulle
+                } else if (cellContent && dynamic_cast<Bubble*>(cellContent.get())) {
+                    cell.setFillColor(sf::Color(0,0,0)); // Bulle
                 } else {
-                    continue; // Cellule vide
+                    continue; // Cellule vide, ne rien dessiner
                 }
+
+                // Dessine la cellule
                 window.draw(cell);
             }
         }

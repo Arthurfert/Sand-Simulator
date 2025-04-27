@@ -1,7 +1,5 @@
 #include "Bubble.h"
 
-Bubble::Bubble() : x(0), y(0) {}
-
 Bubble::Bubble(int x, int y) : x(x), y(y) {}
 
 int Bubble::getX() const {

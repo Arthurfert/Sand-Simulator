@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
-#include <numeric>
+#include <memory>
+#include "Sable.h"
+#include "Obstacle.h"
+#include "Bubble.h"
 
 class Table {
 public:
@@ -14,10 +17,10 @@ public:
     void clearCell(int x, int y); // Efface la cellule à la position (x, y)
     void clear(); // Efface toute la grille
 
-    const std::vector<std::vector<int>>& getGrid() const; // Accesseur pour obtenir la grille
+    const std::vector<std::vector<std::shared_ptr<Particule>>>& getGrid() const;
 
 private:
-    int width; // Largeur de la grille
-    int height; // Hauteur de la grille
-    std::vector<std::vector<int>> grid; // Grille de simulation
+    int width;
+    int height;
+    std::vector<std::vector<std::shared_ptr<Particule>>> grid; // Grid storing objects (sand, obstacles, bubbles)
 };

@@ -1,14 +1,13 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include "Particule.h"
 
-class Obstacle {
+class Obstacle : public Particule {
 public:
-    Obstacle(int x, int y); // Constructeur avec position
-
+    Obstacle(int x = 0, int y = 0); // Default and parameterized constructor
     int getX() const;
     int getY() const;
 
 private:
-    int x; // Position X de l'obstacle
-    int y; // Position Y de l'obstacle
+    int x;
+    int y;
 };
