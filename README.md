@@ -14,8 +14,8 @@ The goal with this project is to :
 
 - Make a real-time sand filler that the user can move with his mouse. *check*
 - Make a real-time obstacle maker, following the user's mouse (changing from one another with a stroke). *check*
-- Make a 'air' one, that acts like the sand but in reverse, erasing it.
-- Add inertia and other things to complexify the simulation and make it more realistic.
+- Make a 'air' one, that acts like the sand but in reverse, erasing it. *check*
+- Add inertia and other things to complexify the simulation and make it more realistic. *arriving*
 
 ## Authors and Licence
 

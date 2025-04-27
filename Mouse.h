@@ -5,12 +5,10 @@ class Mouse {
 public:
     Mouse();
 
-    // Met à jour la position de la souris
-    void update(const sf::RenderWindow& window);
+    void update(const sf::RenderWindow& window); // Met à jour la position de la souris
 
-    // Retourne la position de la souris en coordonnées de la grille
-    sf::Vector2i getGridPosition(int cellSize) const;
+    sf::Vector2i getGridPosition(int cellSize) const; // Récupère la position de la souris dans la grille
 
 private:
-    sf::Vector2i position; // Position de la souris en pixels    sf::Vector2i position; // Position de la souris en pixels
+    sf::Vector2i position; // Position de la souris en pixels
 };

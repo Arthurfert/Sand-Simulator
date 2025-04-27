@@ -5,7 +5,7 @@
 #include "Mouse.h"
 
 int main() {
-    int width = 150, height = 150, cellSize = 1;
+    int width = 150, height = 150, cellSize = 1; // Paramètres par défaut
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "             Sand Simulation by Arthur FERT               " << std::endl;
     std::cout << "----------------------------------------------------------" << std::endl;
@@ -21,8 +21,8 @@ int main() {
     std::cout << "Veuillez entrer la hauteur du tableau : ";
     std::cin >> height;
 
-    Table table(width, height);
-    Mouse mouse;
+    Table table(width, height); // Création de la grille vide
+    Mouse mouse; // Création de l'objet souris (permet de récupérer la position de la souris)
 
     // Création de la fenêtre SFML
     sf::RenderWindow window(sf::VideoMode(width, height), "Simulation de sable");
@@ -37,14 +37,15 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
 
-            // Detecte la pression de la touche 'C' pour effacer le tableau
+            // Detecte la pression de la touche 'D' pour effacer le tableau
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
                 table.clear(); // Efface le tableau
             }
-
+            // Detecte la pression de la touche 'C' pour changer le type de particules
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::C) {
                 type = !type; // Change le type de particules
             }
+            // Detecte la pression de la touche 'G' pour activer/désactiver la gomme
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G) {
                 gomme = !gomme; // Active ou désactive la gomme
             }
@@ -90,8 +91,8 @@ int main() {
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
 
-                    // Définir une zone autour de la position de la souris
-                    int zoneSize = 3; // Taille de la zone (par exemple, 3x3 autour de la souris)
+                    // Défini une zone autour de la position de la souris
+                    int zoneSize = 3; // Taille de la zone, 3x3 pixels
 
                     // Générateur de nombres aléatoires
                     std::random_device rd;
@@ -113,7 +114,7 @@ int main() {
                         }
                     }
                 }
-                // Met à jour la simulation
+                // Met à jour la simulation dans le sens du sable
                 table.updateSand();
             } else {
                 // Ajoute une bulle avec un clic gauche
@@ -126,7 +127,7 @@ int main() {
                         table.addBubble(gridPos.x, gridPos.y);
                     }
                 }
-                // Met à jour la simulation
+                // Met à jour la simulation dans le sens des bulles
                 table.updateBubble();
             }
         }
@@ -134,12 +135,13 @@ int main() {
         // Efface la fenêtre
         window.clear(sf::Color::Black);
 
-        // Dessine la grille
+        // Redessine la grille
         for (int y = 0; y < height; ++y) {
             for (int x = 0; x < width; ++x) {
+                // Crée un rectangle pour chaque cellule de la grille
                 sf::RectangleShape cell(sf::Vector2f(cellSize, cellSize));
                 cell.setPosition(x, y);
-
+                // Défini la couleur de la cellule en fonction de son état
                 if (table.getGrid()[y][x] == 1) {
                     cell.setFillColor(sf::Color::Yellow); // Sable
                 } else if (table.getGrid()[y][x] == 2) {
@@ -149,7 +151,6 @@ int main() {
                 } else {
                     continue; // Cellule vide
                 }
-
                 window.draw(cell);
             }
         }
