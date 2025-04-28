@@ -78,23 +78,6 @@ void Table::updateBubble() {
     }
 }
 
-void Table::display() const {
-    for (const auto& row : grid) {
-        for (const auto& cell : row) {
-            if (cell && dynamic_cast<Sable*>(cell.get())) {
-                std::cout << "S ";
-            } else if (cell && dynamic_cast<Obstacle*>(cell.get())) {
-                std::cout << "O ";
-            } else if (cell && dynamic_cast<Bubble*>(cell.get())) {
-                std::cout << "B ";
-            } else {
-                std::cout << ". ";
-            }
-        }
-        std::cout << std::endl;
-    }
-}
-
 const std::vector<std::vector<std::shared_ptr<Particule>>>& Table::getGrid() const {
     return grid;
 }

@@ -2,5 +2,5 @@
 
 class Particule {
 public:
-    virtual ~Particule() = default; // Virtual destructor for polymorphism
+    virtual ~Particule() = default; // Destructeur virtuel pour polymorphisme
 };

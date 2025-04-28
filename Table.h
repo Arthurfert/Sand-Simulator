@@ -13,7 +13,6 @@ public:
     void addBubble(int x, int y); // Ajoute une bulle à la position (x, y)
     void updateSand(); // Met à jour la position des particules de sable
     void updateBubble(); // Met à jour la position des bulles
-    void display() const; // Affiche la grille dans la console (pour le débogage)
     void clearCell(int x, int y); // Efface la cellule à la position (x, y)
     void clear(); // Efface toute la grille
 
