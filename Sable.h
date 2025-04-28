@@ -8,6 +8,8 @@ public:
     int getY() const; // Accesseur pour y
     void setPosition(int x, int y); // Modificateur pour x et y
 
+    void update(class Table& table, int x, int y) override; // Ajout de override
+
 private:
     int x; // Coordonnée x du sable
     int y; // Coordonnée y du sable

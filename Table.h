@@ -11,12 +11,16 @@ public:
     void addSable(int x, int y); // Ajoute une particule de sable à la position (x, y)
     void addObstacle(int x, int y); // Ajoute un obstacle à la position (x, y)
     void addBubble(int x, int y); // Ajoute une bulle à la position (x, y)
-    void updateSand(); // Met à jour la position des particules de sable
-    void updateBubble(); // Met à jour la position des bulles
+    void update(); // Met à jour la position des particules
     void clearCell(int x, int y); // Efface la cellule à la position (x, y)
     void clear(); // Efface toute la grille
 
     const std::vector<std::vector<std::shared_ptr<Particule>>>& getGrid() const; // Accesseur pour la grille
+    int getWidth() const; // Retourne la largeur de la grille
+    int getHeight() const; // Retourne la hauteur de la grille
+    std::shared_ptr<Particule> getCell(int x, int y) const; // Retourne la particule à une position donnée
+    void setCell(int x, int y, std::shared_ptr<Particule> particule); // Définit une particule à une position donnée
+    void moveParticle(int fromX, int fromY, int toX, int toY); // Déplace une particule d'une position à une autre
 
 private:
     int width; // Largeur de la grille

@@ -1,4 +1,6 @@
 #include "Table.h"
+#include "Sable.h"
+#include "Bubble.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -26,53 +28,36 @@ void Table::addBubble(int x, int y) {
     }
 }
 
-void Table::updateSand() {
+std::shared_ptr<Particule> Table::getCell(int x, int y) const {
+    return grid[y][x];
+}
+
+void Table::setCell(int x, int y, std::shared_ptr<Particule> particule) {
+    grid[y][x] = particule;
+}
+
+void Table::moveParticle(int fromX, int fromY, int toX, int toY) {
+    auto temp = grid[toY][toX]; // Stocke la particule temporairement
+    grid[toY][toX] = grid[fromY][fromX];
+    grid[fromY][fromX] = temp;
+}
+
+void Table::update() {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    for (int y = height - 2; y >= 0; --y) { // Calcule de bas en haut
+    // Parcourir les lignes de bas en haut
+    for (int y = height - 2; y >= 0; --y) {
         // Crée une liste mélangée d'indices de colonnes
         std::vector<int> columns(width);
         std::iota(columns.begin(), columns.end(), 0); // Remplit avec 0, 1, ..., width-1
         std::shuffle(columns.begin(), columns.end(), gen); // Mélange les colonnes
 
+        // Parcourir les colonnes dans l'ordre mélangé
         for (int x : columns) {
-            if (grid[y][x] && dynamic_cast<Sable*>(grid[y][x].get())) {
-                if (y + 1 < height && (!grid[y + 1][x] || dynamic_cast<Bubble*>(grid[y + 1][x].get()))) {
-                    grid[y + 1][x] = grid[y][x];
-                    grid[y][x] = nullptr;
-                } else if (y + 1 < height && x > 0 && (!grid[y + 1][x - 1] || dynamic_cast<Bubble*>(grid[y + 1][x - 1].get()))) {
-                    grid[y + 1][x - 1] = grid[y][x];
-                    grid[y][x] = nullptr;
-                } else if (y + 1 < height && x < width - 1 && (!grid[y + 1][x + 1] || dynamic_cast<Bubble*>(grid[y + 1][x + 1].get()))) {
-                    grid[y + 1][x + 1] = grid[y][x];
-                    grid[y][x] = nullptr;
-                }
-            }
-        }
-    }
-}
-
-void Table::updateBubble() {
-    std::random_device rd;
-    std::mt19937 gen(rd());
-
-    for (int y = 1; y < height; ++y) {
-        std::vector<int> columns(width);
-        std::iota(columns.begin(), columns.end(), 0);
-        std::shuffle(columns.begin(), columns.end(), gen);
-
-        for (int x : columns) {
-            if (grid[y][x] && dynamic_cast<Bubble*>(grid[y][x].get())) {
-                std::uniform_int_distribution<> dist(-1, 1);
-                int direction = dist(gen);
-                int newX = x + direction;
-                int newY = y - 1;
-
-                if (newY >= 0 && newX >= 0 && newX < width && grid[newY][newX] && dynamic_cast<Sable*>(grid[newY][newX].get())) {
-                    grid[newY][newX] = std::make_shared<Bubble>(newX, newY);
-                    grid[y][x] = std::make_shared<Sable>(x, y); // Remplace la bulle par du sable
-                }
+            if (grid[y][x]) {
+                // Appeler la méthode update spécifique à la particule
+                grid[y][x]->update(*this, x, y);
             }
         }
     }
@@ -92,4 +77,12 @@ void Table::clear() {
     for (auto& row : grid) {
         std::fill(row.begin(), row.end(), nullptr);
     }
+}
+
+int Table::getWidth() const {
+    return width;
+}
+
+int Table::getHeight() const {
+    return height;
 }

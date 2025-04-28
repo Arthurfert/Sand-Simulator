@@ -50,6 +50,9 @@ int main() {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G) {
                 gomme = !gomme; // Active ou désactive la gomme
             }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::V) {
+                continue; // TODO : Supprime l'effet de fond à height
+            }
         }
 
         // Met à jour la position de la souris
@@ -85,7 +88,7 @@ int main() {
                     table.clearCell(gridPos.x, gridPos.y);
                 }
             }
-            table.updateSand();
+            table.update();
         } else {
             if (type){
                 // Ajoute du sable avec un clic gauche
@@ -116,7 +119,7 @@ int main() {
                     }
                 }
                 // Met à jour la simulation dans le sens du sable
-                table.updateSand();
+                table.update();
             } else {
                 // Ajoute une bulle avec un clic gauche
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -129,7 +132,7 @@ int main() {
                     }
                 }
                 // Met à jour la simulation dans le sens des bulles
-                table.updateBubble();
+                table.update();
             }
         }
 
