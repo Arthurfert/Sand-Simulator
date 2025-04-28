@@ -11,13 +11,13 @@ Table::Table(int width, int height) : width(width), height(height) {
 }
 
 void Table::addSable(int x, int y) {
-    if (x >= 0 && x < width && y >= 0 && y < height && !grid[y][x]) {
+    if (x >= 0 && x < width && y >= 0 && y < height && (!grid[y][x] || dynamic_cast<Bubble*>(grid[y][x].get()))) {
         grid[y][x] = std::make_shared<Sable>(x, y);
     }
 }
 
 void Table::addObstacle(int x, int y) {
-    if (x >= 0 && x < width && y >= 0 && y < height && !grid[y][x]) {
+    if (x >= 0 && x < width && y >= 0 && y < height && (!grid[y][x] || dynamic_cast<Bubble*>(grid[y][x].get()))) {
         grid[y][x] = std::make_shared<Obstacle>(x, y);
     }
 }
