@@ -16,10 +16,10 @@ public:
     void clearCell(int x, int y); // Efface la cellule à la position (x, y)
     void clear(); // Efface toute la grille
 
-    const std::vector<std::vector<std::shared_ptr<Particule>>>& getGrid() const;
+    const std::vector<std::vector<std::shared_ptr<Particule>>>& getGrid() const; // Accesseur pour la grille
 
 private:
-    int width;
-    int height;
-    std::vector<std::vector<std::shared_ptr<Particule>>> grid; // Grid storing objects (sand, obstacles, bubbles)
+    int width; // Largeur de la grille
+    int height; // Hauteur de la grille
+    std::vector<std::vector<std::shared_ptr<Particule>>> grid; // Grille de particules
 };
