@@ -12,6 +12,7 @@ int main() {
     std::cout << "Ajouter un obstacle avec un clic droit." << std::endl;
     std::cout << "Appuyez sur 'd' (delete) pour effacer le tableau." << std::endl;
     std::cout << "Appuyez sur 'g' pour activer/désactiver la gomme." << std::endl;
+    std::cout << "Appuyez sur 'v' pour activer/désactiver le vide." << std::endl;
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "Veuillez entrer la largeur du tableau : ";
     std::cin >> width;
