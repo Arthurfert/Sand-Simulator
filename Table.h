@@ -3,15 +3,13 @@
 #include <memory>
 #include "Sable.h"
 #include "Obstacle.h"
-#include "Bubble.h"
 
 class Table {
 public:
     Table(int width, int height); // Constructeur qui initialise la grille avec des zéros (cellules vides)
     void addSable(int x, int y); // Ajoute une particule de sable à la position (x, y)
     void addObstacle(int x, int y); // Ajoute un obstacle à la position (x, y)
-    void addBubble(int x, int y); // Ajoute une bulle à la position (x, y)
-    void update(); // Met à jour la position des particules
+    void update(bool vide); // Met à jour la position des particules
     void clearCell(int x, int y); // Efface la cellule à la position (x, y)
     void clear(); // Efface toute la grille
 

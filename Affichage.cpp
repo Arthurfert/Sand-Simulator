@@ -13,8 +13,8 @@ Affichage::Affichage(int width, int height, int cellSize)
 }
 
 void Affichage::run(Table& table) {
-    bool type = true; // Type de particule (false = bulle, true = sable)
     bool gomme = false; // Gomme activé ou non (false = non, true = oui)
+    bool vide = false; // Vide activé ou non (false = non, true = oui)
     // Boucle principale
     while (window.isOpen()) {
         sf::Event event;
@@ -26,16 +26,12 @@ void Affichage::run(Table& table) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
                 table.clear(); // Efface le tableau
             }
-            // Detecte la pression de la touche 'C' pour changer le type de particules
-            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::C) {
-                type = !type; // Change le type de particules
-            }
             // Detecte la pression de la touche 'G' pour activer/désactiver la gomme
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::G) {
                 gomme = !gomme; // Active ou désactive la gomme
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::V) {
-                continue; // TODO : Supprime l'effet de fond à height
+                vide = !vide; // Active ou désactive le vide
             }
         }
 
@@ -72,52 +68,37 @@ void Affichage::run(Table& table) {
                     table.clearCell(gridPos.x, gridPos.y);
                 }
             }
-            table.update();
+            table.update(vide);
         } else {
-            if (type){
-                // Ajoute du sable avec un clic gauche
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+            // Ajoute du sable avec un clic gauche
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
 
-                    // Défini une zone autour de la position de la souris
-                    int zoneSize = 3; // Taille de la zone, 3x3 pixels
+                // Défini une zone autour de la position de la souris
+                int zoneSize = 3; // Taille de la zone, 3x3 pixels
 
-                    // Générateur de nombres aléatoires
-                    std::random_device rd;
-                    std::mt19937 gen(rd());
-                    std::uniform_int_distribution<int> distX(-zoneSize, zoneSize);
-                    std::uniform_int_distribution<int> distY(-zoneSize, zoneSize);
+                // Générateur de nombres aléatoires
+                std::random_device rd;
+                std::mt19937 gen(rd());
+                std::uniform_int_distribution<int> distX(-zoneSize, zoneSize);
+                std::uniform_int_distribution<int> distY(-zoneSize, zoneSize);
 
-                    // Générer plusieurs particules dans la zone
-                    for (int i = 0; i < 5; ++i) { // 5 particules par clic
-                        int offsetX = distX(gen);
-                        int offsetY = distY(gen);
+                // Générer plusieurs particules dans la zone
+                for (int i = 0; i < 5; ++i) { // 5 particules par clic
+                    int offsetX = distX(gen);
+                    int offsetY = distY(gen);
 
-                        int newX = gridPos.x + offsetX;
-                        int newY = gridPos.y + offsetY;
+                    int newX = gridPos.x + offsetX;
+                    int newY = gridPos.y + offsetY;
 
-                        // Vérifie que la position générée est dans les limites de la grille
-                        if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                            table.addSable(newX, newY);
-                        }
+                    // Vérifie que la position générée est dans les limites de la grille
+                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                        table.addSable(newX, newY);
                     }
                 }
-                // Met à jour la simulation dans le sens du sable
-                table.update();
-            } else {
-                // Ajoute une bulle avec un clic gauche
-                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
-
-                    // Vérifie que la position centrale est dans les limites de la grille
-                    if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
-                        // Ajoute une bulle à la position générée
-                        table.addBubble(gridPos.x, gridPos.y);
-                    }
-                }
-                // Met à jour la simulation dans le sens des bulles
-                table.update();
             }
+            // Met à jour la simulation dans le sens du sable
+            table.update(vide);
         }
 
         // Efface la fenêtre
@@ -144,8 +125,6 @@ void Affichage::render(Table& table) {
                 cell.setFillColor(sf::Color::Yellow); // Sable
             } else if (cellContent && dynamic_cast<Obstacle*>(cellContent.get())) {
                 cell.setFillColor(sf::Color(128, 128, 128)); // Obstacle
-            } else if (cellContent && dynamic_cast<Bubble*>(cellContent.get())) {
-                cell.setFillColor(sf::Color(0, 0, 0)); // Bulle
             } else {
                 continue; // Cellule vide, ne rien dessiner
             }

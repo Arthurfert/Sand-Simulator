@@ -1,6 +1,5 @@
 #include "Table.h"
 #include "Sable.h"
-#include "Bubble.h"
 #include <iostream>
 #include <algorithm>
 #include <random>
@@ -11,20 +10,14 @@ Table::Table(int width, int height) : width(width), height(height) {
 }
 
 void Table::addSable(int x, int y) {
-    if (x >= 0 && x < width && y >= 0 && y < height && (!grid[y][x] || dynamic_cast<Bubble*>(grid[y][x].get()))) {
+    if (x >= 0 && x < width && y >= 0 && y < height && !grid[y][x]) {
         grid[y][x] = std::make_shared<Sable>(x, y);
     }
 }
 
 void Table::addObstacle(int x, int y) {
-    if (x >= 0 && x < width && y >= 0 && y < height && (!grid[y][x] || dynamic_cast<Bubble*>(grid[y][x].get()))) {
+    if (x >= 0 && x < width && y >= 0 && y < height && !grid[y][x]) {
         grid[y][x] = std::make_shared<Obstacle>(x, y);
-    }
-}
-
-void Table::addBubble(int x, int y) {
-    if (x >= 0 && x < width && y >= 0 && y < height && grid[y][x] && dynamic_cast<Sable*>(grid[y][x].get())) {
-        grid[y][x] = std::make_shared<Bubble>(x, y);
     }
 }
 
@@ -42,7 +35,7 @@ void Table::moveParticle(int fromX, int fromY, int toX, int toY) {
     grid[fromY][fromX] = temp;
 }
 
-void Table::update() {
+void Table::update(bool vide) {
     std::random_device rd;
     std::mt19937 gen(rd());
 
@@ -57,7 +50,7 @@ void Table::update() {
         for (int x : columns) {
             if (grid[y][x]) {
                 // Appeler la méthode update spécifique à la particule
-                grid[y][x]->update(*this, x, y);
+                grid[y][x]->update(*this, x, y, vide);
             }
         }
     }

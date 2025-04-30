@@ -11,7 +11,6 @@ int main() {
     std::cout << "Ajouter du sable avec un clic gauche." << std::endl;
     std::cout << "Ajouter un obstacle avec un clic droit." << std::endl;
     std::cout << "Appuyez sur 'd' (delete) pour effacer le tableau." << std::endl;
-    std::cout << "Appuyez sur 'c' pour changer le type de particules (sable ou bulle)." << std::endl;
     std::cout << "Appuyez sur 'g' pour activer/désactiver la gomme." << std::endl;
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "Veuillez entrer la largeur du tableau : ";
