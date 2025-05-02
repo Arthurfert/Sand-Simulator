@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <random>
+#include <filesystem>
 #include "Affichage.h"
 #include "Table.h"
 #include "Mouse.h"
@@ -136,29 +137,4 @@ void Affichage::render(Table& table) {
             window.draw(cell);
         }
     }
-}
-
-void Affichage::displayStatus(bool gomme, bool vide) {
-    sf::Font font;
-    if (!font.loadFromFile("arial.ttf")) { // Assurez-vous que le fichier arial.ttf est dans le répertoire du projet
-        std::cerr << "Erreur : Impossible de charger la police arial.ttf" << std::endl;
-        return;
-    }
-
-    sf::Text statusText;
-    statusText.setFont(font);
-    statusText.setCharacterSize(20); // Taille du texte
-    statusText.setFillColor(sf::Color::White); // Couleur du texte
-    statusText.setPosition(10.f, 10.f); // Position dans la fenêtre
-
-    // Construire le texte à afficher
-    std::string status = "Mode : ";
-    status += gomme ? "Gomme" : "Sable";
-    status += "\nVide : ";
-    status += vide ? "Actif" : "Inactif";
-
-    statusText.setString(status);
-
-    // Dessiner le texte dans la fenêtre
-    window.draw(statusText);
 }
