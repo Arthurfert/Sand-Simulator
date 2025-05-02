@@ -98,7 +98,7 @@ void Affichage::run(Table& table) {
                     }
                 }
             }
-            // Met à jour la simulation dans le sens du sable
+            // Met à jour la simulation
             table.update(vide);
         }
 
@@ -107,9 +107,6 @@ void Affichage::run(Table& table) {
 
         // Dessine la grille
         render(table);
-
-        // Affiche le statut
-        displayStatus(gomme, vide);
 
         // Affiche le contenu de la fenêtre
         window.display();

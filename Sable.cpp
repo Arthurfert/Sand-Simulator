@@ -18,8 +18,11 @@ void Sable::setPosition(int x, int y) {
 
 void Sable::update(Table& table, int x, int y, bool vide) {
     if (vide) {
-        if (y+1 > table.getHeight()-1) {
+        if (y+1 > table.getHeight()-2) {
             table.clearCell(x,y);
+            for (int i = 0; i < table.getWidth(); ++i) {
+                table.clearCell(i, table.getHeight()-1);
+            }
         } else if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
             table.moveParticle(x, y, x, y + 1);
         } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
