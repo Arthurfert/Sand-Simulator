@@ -11,12 +11,16 @@ int Sable::getY() const {
     return y;
 }
 
+int Sable::getV() const {
+    return v;
+}
+
 void Sable::setPosition(int x, int y) {
     this->x = x;
     this->y = y;
 }
 
-void Sable::update(Table& table, int x, int y, bool vide) {
+void Sable::update(Table& table, int x, int y, bool vide, bool inertie) {
     if (vide) {
         if (y+1 > table.getHeight()-2) {
             table.clearCell(x,y);
@@ -31,12 +35,29 @@ void Sable::update(Table& table, int x, int y, bool vide) {
             table.moveParticle(x, y, x + 1, y + 1);
         }
     } else {
-        if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
-            table.moveParticle(x, y, x, y + 1);
-        } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
-            table.moveParticle(x, y, x - 1, y + 1);
-        } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
-            table.moveParticle(x, y, x + 1, y + 1);
+        if (inertie) {
+            // Logique avec inertie : le sable continue dans la même direction si possible
+            if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
+                table.moveParticle(x, y, x, y + 1);
+            } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
+                table.moveParticle(x, y, x - 1, y + 1);
+            } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
+                table.moveParticle(x, y, x + 1, y + 1);
+            } else if (x > 0 && !table.getCell(x - 1, y) && getV()>0) {
+                table.moveParticle(x, y, x - 1, y); // Mouvement horizontal gauche
+                v-=1;
+            } else if (x < table.getWidth() - 1 && !table.getCell(x + 1, y) && getV()>0) {
+                table.moveParticle(x, y, x + 1, y); // Mouvement horizontal droite
+                v-=1;
+            }
+        } else {
+            if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
+                table.moveParticle(x, y, x, y + 1);
+            } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
+                table.moveParticle(x, y, x - 1, y + 1);
+            } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
+                table.moveParticle(x, y, x + 1, y + 1);
+            }
         }
     }
 }

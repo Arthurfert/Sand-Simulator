@@ -16,6 +16,7 @@ Affichage::Affichage(int width, int height, int cellSize)
 void Affichage::run(Table& table) {
     bool gomme = false; // Gomme activé ou non (false = non, true = oui)
     bool vide = false; // Vide activé ou non (false = non, true = oui)
+    bool inertie = false; //Inertie activée ou non (false = non, true = oui)
     // Boucle principale
     while (window.isOpen()) {
         sf::Event event;
@@ -33,6 +34,10 @@ void Affichage::run(Table& table) {
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::V) {
                 vide = !vide; // Active ou désactive le vide
+            }
+            // Detecte la pression de la touche 'I' pour activer/désactiver l'inertie
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::I) {
+                inertie = !inertie; // Active ou désactive l'inertie
             }
         }
 
@@ -69,7 +74,6 @@ void Affichage::run(Table& table) {
                     table.clearCell(gridPos.x, gridPos.y);
                 }
             }
-            table.update(vide);
         } else {
             // Ajoute du sable avec un clic gauche
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -98,9 +102,10 @@ void Affichage::run(Table& table) {
                     }
                 }
             }
-            // Met à jour la simulation
-            table.update(vide);
         }
+
+        // Met à jour la simulation
+        table.update(vide, inertie);
 
         // Efface la fenêtre
         window.clear(sf::Color::Black);

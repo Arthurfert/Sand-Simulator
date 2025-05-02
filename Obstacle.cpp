@@ -10,6 +10,6 @@ int Obstacle::getY() const {
     return y;
 }
 
-void Obstacle::update(Table& table, int x, int y, bool vide) {
+void Obstacle::update(Table& table, int x, int y, bool vide, bool inertie) {
     // Les obstacles sont immobiles, donc aucune action n'est nécessaire ici.
 }

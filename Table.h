@@ -9,7 +9,7 @@ public:
     Table(int width, int height); // Constructeur qui initialise la grille avec des zéros (cellules vides)
     void addSable(int x, int y); // Ajoute une particule de sable à la position (x, y)
     void addObstacle(int x, int y); // Ajoute un obstacle à la position (x, y)
-    void update(bool vide); // Met à jour la position des particules
+    void update(bool vide, bool inertie); // Met à jour la position des particules
     void clearCell(int x, int y); // Efface la cellule à la position (x, y)
     void clear(); // Efface toute la grille
 
