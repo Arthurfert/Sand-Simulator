@@ -31,6 +31,7 @@ Ajouter un obstacle avec un clic droit.
 Appuyez sur 'd' (delete) pour effacer le tableau.
 Appuyez sur 'g' pour activer/désactiver la gomme.
 Appuyez sur 'v' pour activer/désactiver le vide.
+Appuyez sur 'i' pour activer/désactiver l'inertie.
 ----------------------------------------------------------
 Veuillez entrer la largeur du tableau : 
 Veuillez entrer la hauteur du tableau : 
@@ -41,6 +42,7 @@ Veuillez entrer la hauteur du tableau :
 - Type 'd' to erase the simulation
 - Type 'g' to activate/deactivate the single cell erasor
 - Type 'v' to activate/deactivate the ground
+- Type 'i' to activate/deactivate inertia
 
 ## Authors and Licence
 

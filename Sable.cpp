@@ -21,6 +21,9 @@ void Sable::setPosition(int x, int y) {
 }
 
 void Sable::update(Table& table, int x, int y, bool vide, bool inertie) {
+    if (x-1 <0 || x+1 >= table.getWidth() || y-1 < 0 || y+1 >= table.getHeight()) {
+        table.clearCell(x,y); // pas de bords latéraux
+    }
     if (vide) {
         if (y+1 > table.getHeight()-2) {
             table.clearCell(x,y);
