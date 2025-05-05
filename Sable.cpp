@@ -11,56 +11,25 @@ int Sable::getY() const {
     return y;
 }
 
-int Sable::getV() const {
-    return v;
+bool Sable::getM() const {
+    return isMoving;
 }
 
-void Sable::setPosition(int x, int y) {
-    this->x = x;
-    this->y = y;
-}
-
-void Sable::update(Table& table, int x, int y, bool vide, bool inertie) {
+void Sable::update(Table& table, int x, int y, bool vide) {
     if (x-1 <0 || x+1 >= table.getWidth() || y-1 < 0 || y+1 >= table.getHeight()) {
         table.clearCell(x,y); // pas de bords latéraux
     }
-    if (vide) {
-        if (y+1 > table.getHeight()-2) {
+    if (vide && y+1 > table.getHeight()-2) {
             table.clearCell(x,y);
             for (int i = 0; i < table.getWidth(); ++i) {
                 table.clearCell(i, table.getHeight()-1);
             }
-        } else if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
-            table.moveParticle(x, y, x, y + 1);
-        } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
-            table.moveParticle(x, y, x - 1, y + 1);
-        } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
-            table.moveParticle(x, y, x + 1, y + 1);
-        }
-    } else {
-        if (inertie) {
-            // Logique avec inertie : le sable continue dans la même direction si possible
-            if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
-                table.moveParticle(x, y, x, y + 1);
-            } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
-                table.moveParticle(x, y, x - 1, y + 1);
-            } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
-                table.moveParticle(x, y, x + 1, y + 1);
-            } else if (x > 0 && !table.getCell(x - 1, y) && getV()>0) {
-                table.moveParticle(x, y, x - 1, y); // Mouvement horizontal gauche
-                v-=1;
-            } else if (x < table.getWidth() - 1 && !table.getCell(x + 1, y) && getV()>0) {
-                table.moveParticle(x, y, x + 1, y); // Mouvement horizontal droite
-                v-=1;
-            }
-        } else {
-            if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
-                table.moveParticle(x, y, x, y + 1);
-            } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
-                table.moveParticle(x, y, x - 1, y + 1);
-            } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
-                table.moveParticle(x, y, x + 1, y + 1);
-            }
-        }
+    }
+    if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
+        table.moveParticle(x, y, x, y + 1);
+    } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
+        table.moveParticle(x, y, x - 1, y + 1);
+    } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
+        table.moveParticle(x, y, x + 1, y + 1);
     }
 }

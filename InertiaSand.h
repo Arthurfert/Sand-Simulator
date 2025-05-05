@@ -1,9 +1,9 @@
 #pragma once
 #include "Particule.h"
 
-class Sable : public Particule {
+class inertiaSand : public Particule {
 public:
-    Sable(int x = 0, int y = 0); // Constructeur par défaut
+    inertiaSand(int x = 0, int y = 0); // Constructeur par défaut
     int getX() const; // Accesseur pour x
     int getY() const; // Accesseur pour y
 

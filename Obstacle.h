@@ -7,7 +7,8 @@ public:
     int getX() const; // Accesseur pour x
     int getY() const; // Accesseur pour y
 
-    void update(class Table& table, int x, int y, bool vide, bool inertie) override; // Implémentation de la méthode virtuelle pure
+    void update(class Table& table, int x, int y, bool vide) override; // Implémentation de la méthode virtuelle pure
+    bool getM() const override { return false; } // Obstacle n'est pas en mouvement
 
 private:
     int x; // Coordonnée x de l'obstacle
