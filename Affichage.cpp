@@ -17,6 +17,7 @@ void Affichage::run(Table& table) {
     bool gomme = false; // Gomme activé ou non (false = non, true = oui)
     bool vide = false; // Vide activé ou non (false = non, true = oui)
     bool inertie = false; //Inertie activée ou non (false = non, true = oui)
+    bool pause = false; // Pause activée ou non (false = non, true = oui)
     // Boucle principale
     while (window.isOpen()) {
         sf::Event event;
@@ -39,82 +40,91 @@ void Affichage::run(Table& table) {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::I) {
                 inertie = !inertie; // Active ou désactive l'inertie
             }
-        }
-
-        // Met à jour la position de la souris
-        mouse.update(window);
-
-        // Ajoute un obstacle avec un clic droit
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-            sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
-
-            // Vérifie que la position centrale est dans les limites de la grille
-            if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
-                // Ajoute un bloc de 2 pixels de large
-                for (int offset = 0; offset < 3; ++offset) {
-                    int newX = gridPos.x + offset;
-                    int newY = gridPos.y + offset;
-                    // Vérifie que la position générée est dans les limites de la grille
-                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                        // Ajoute un obstacle à la position générée
-                        table.addObstacle(newX, newY);
-                    }
-                }
+            // Detecte la pression de la touche 'espace' pour activer/désactiver la pause
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                pause = !pause; // Active ou désactive la pause
             }
         }
+        if (pause) {
+            // Si la simulation est en pause, on ne fait rien
+            continue;
+        }
+        else {
+            // Met à jour la position de la souris
+            mouse.update(window);
 
-        if (gomme) {
-            // Efface une cellule avec un clic gauche
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            // Ajoute un obstacle avec un clic droit
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
                 sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
 
                 // Vérifie que la position centrale est dans les limites de la grille
                 if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
-                    // Efface la cellule à la position générée
-                    table.clearCell(gridPos.x, gridPos.y);
-                }
-            }
-        } else {
-            // Ajoute du sable avec un clic gauche
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
-
-                // Défini une zone autour de la position de la souris
-                int zoneSize = 3; // Taille de la zone, 3x3 pixels
-
-                // Générateur de nombres aléatoires
-                std::random_device rd;
-                std::mt19937 gen(rd());
-                std::uniform_int_distribution<int> distX(-zoneSize, zoneSize);
-                std::uniform_int_distribution<int> distY(-zoneSize, zoneSize);
-
-                // Générer plusieurs particules dans la zone
-                for (int i = 0; i < 5; ++i) { // 5 particules par clic
-                    int offsetX = distX(gen);
-                    int offsetY = distY(gen);
-
-                    int newX = gridPos.x + offsetX;
-                    int newY = gridPos.y + offsetY;
-
-                    // Vérifie que la position générée est dans les limites de la grille
-                    if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
-                        table.addSable(newX, newY);
+                    // Ajoute un bloc de 2 pixels de large
+                    for (int offset = 0; offset < 3; ++offset) {
+                        int newX = gridPos.x + offset;
+                        int newY = gridPos.y + offset;
+                        // Vérifie que la position générée est dans les limites de la grille
+                        if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                            // Ajoute un obstacle à la position générée
+                            table.addObstacle(newX, newY);
+                        }
                     }
                 }
             }
+
+            if (gomme) {
+                // Efface une cellule avec un clic gauche
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+
+                    // Vérifie que la position centrale est dans les limites de la grille
+                    if (gridPos.x >= 0 && gridPos.x < width && gridPos.y >= 0 && gridPos.y < height) {
+                        // Efface la cellule à la position générée
+                        table.clearCell(gridPos.x, gridPos.y);
+                    }
+                }
+            } else {
+                // Ajoute du sable avec un clic gauche
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    sf::Vector2i gridPos = mouse.getGridPosition(cellSize);
+
+                    // Défini une zone autour de la position de la souris
+                    int zoneSize = 3; // Taille de la zone, 3x3 pixels
+
+                    // Générateur de nombres aléatoires
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_int_distribution<int> distX(-zoneSize, zoneSize);
+                    std::uniform_int_distribution<int> distY(-zoneSize, zoneSize);
+
+                    // Générer plusieurs particules dans la zone
+                    for (int i = 0; i < 5; ++i) { // 5 particules par clic
+                        int offsetX = distX(gen);
+                        int offsetY = distY(gen);
+
+                        int newX = gridPos.x + offsetX;
+                        int newY = gridPos.y + offsetY;
+
+                        // Vérifie que la position générée est dans les limites de la grille
+                        if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
+                            table.addSable(newX, newY);
+                        }
+                    }
+                }
+            }
+
+            // Met à jour la simulation
+            table.update(vide, inertie);
+
+            // Efface la fenêtre
+            window.clear(sf::Color::Black);
+
+            // Dessine la grille
+            render(table);
+
+            // Affiche le contenu de la fenêtre
+            window.display();
         }
-
-        // Met à jour la simulation
-        table.update(vide, inertie);
-
-        // Efface la fenêtre
-        window.clear(sf::Color::Black);
-
-        // Dessine la grille
-        render(table);
-
-        // Affiche le contenu de la fenêtre
-        window.display();
     }
 }
 
