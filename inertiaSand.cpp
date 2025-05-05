@@ -42,18 +42,11 @@ void inertiaSand::update(Table& table, int x, int y, bool vide) {
             isMoving = false;
         }
     } else {
-        // Logique avec inertie : le inertiaSand continue dans la même direction si possible
-        if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
-            table.moveParticle(x, y, x, y + 1);
-        } else if (y + 1 < table.getHeight() && x > 0 && !table.getCell(x - 1, y + 1)) {
-            table.moveParticle(x, y, x - 1, y + 1);
-        } else if (y + 1 < table.getHeight() && x < table.getWidth() - 1 && !table.getCell(x + 1, y + 1)) {
-            table.moveParticle(x, y, x + 1, y + 1);
-        } else if (x > 0 && x < table.getWidth() - 1) {
+        if (x > 0 && x < table.getWidth() - 1) {
             auto leftCell = table.getCell(x - 1, y);
             auto rightCell = table.getCell(x + 1, y);
 
-            if (leftCell && rightCell && leftCell->getM() && rightCell->getM()) {
+            if ((leftCell && leftCell->getM()) || (rightCell  && rightCell->getM()) || !table.getCell(x, y + 1)) {
                 isMoving = true; // Si les particules adjacentes bougent, on se remet en mouvement
             }
         }
