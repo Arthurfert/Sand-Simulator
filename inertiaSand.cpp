@@ -21,7 +21,7 @@ void inertiaSand::update(Table& table, int x, int y, bool vide, int resistance) 
         table.clearCell(x, y); // Pas de bords latéraux
         return;
     }
-
+    // Suppression des particules si le vide est activé et que la particule est en bas
     if (vide && y + 1 > table.getHeight() - 2) {
         table.clearCell(x, y);
         for (int i = 0; i < table.getWidth(); ++i) {
@@ -43,12 +43,14 @@ void inertiaSand::update(Table& table, int x, int y, bool vide, int resistance) 
             isMoving = false;
         }
     } else {
+        // Définition du test random(0,1)
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_real_distribution<> dis(0, 1);
 
         double randomValue = dis(gen);
-        double res = resistance * 0.1;
+        double res = resistance * 0.1; // Résistance de 0 à 1
+        // test de la résistance
         if (randomValue > res) {
             if (x > 0 && x < table.getWidth() - 1) {
                 auto leftCell = table.getCell(x - 1, y);

@@ -14,6 +14,9 @@ int main() {
     std::cout << "Appuyez sur 'g' pour activer/désactiver la gomme." << std::endl;
     std::cout << "Appuyez sur 'v' pour activer/désactiver le vide." << std::endl;
     std::cout << "Appuyez sur 'i' pour activer/désactiver l'inertie." << std::endl;
+    std::cout << "Appuyez sur 'espace' pour mettre la simulation en pause." << std::endl;
+    std::cout << "Appuyez sur 'flèche haut' pour augmenter la résistance." << std::endl;
+    std::cout << "Appuyez sur 'flèche bas' pour diminuer la résistance." << std::endl;
     std::cout << "----------------------------------------------------------" << std::endl;
     std::cout << "Veuillez entrer la largeur du tableau : ";
     std::cin >> width;
