@@ -1,5 +1,6 @@
 #include "inertiaSand.h"
 #include "Table.h"
+#include <random>
 
 inertiaSand::inertiaSand(int x, int y) : x(x), y(y) {}
 
@@ -15,7 +16,7 @@ bool inertiaSand::getM() const {
     return isMoving;
 }
 
-void inertiaSand::update(Table& table, int x, int y, bool vide) {
+void inertiaSand::update(Table& table, int x, int y, bool vide, int resistance) {
     if (x - 1 < 0 || x + 1 >= table.getWidth() || y - 1 < 0 || y + 1 >= table.getHeight()) {
         table.clearCell(x, y); // Pas de bords latéraux
         return;
@@ -42,13 +43,25 @@ void inertiaSand::update(Table& table, int x, int y, bool vide) {
             isMoving = false;
         }
     } else {
-        if (x > 0 && x < table.getWidth() - 1) {
-            auto leftCell = table.getCell(x - 1, y);
-            auto rightCell = table.getCell(x + 1, y);
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<> dis(0, 1);
 
-            if ((leftCell && leftCell->getM()) || (rightCell  && rightCell->getM()) || !table.getCell(x, y + 1)) {
-                isMoving = true; // Si les particules adjacentes bougent, on se remet en mouvement
+        double randomValue = dis(gen);
+        double res = resistance * 0.1;
+        if (randomValue > res) {
+            if (x > 0 && x < table.getWidth() - 1) {
+                auto leftCell = table.getCell(x - 1, y);
+                auto rightCell = table.getCell(x + 1, y);
+
+                if ((leftCell && leftCell->getM()) || (rightCell  && rightCell->getM()) || !table.getCell(x, y + 1)) {
+                    isMoving = true; // Si les particules adjacentes bougent, on se remet en mouvement
+                }
             }
+        }
+        if (y + 1 < table.getHeight() && !table.getCell(x, y + 1)) {
+            table.moveParticle(x, y, x, y + 1);
+            isMoving = true; // On remet la particule en mouvement si elle descend
         }
     }
 }

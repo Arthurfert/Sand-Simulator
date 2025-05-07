@@ -15,7 +15,7 @@ bool Sable::getM() const {
     return isMoving;
 }
 
-void Sable::update(Table& table, int x, int y, bool vide) {
+void Sable::update(Table& table, int x, int y, bool vide, int resistance) {
     if (x-1 <0 || x+1 >= table.getWidth() || y-1 < 0 || y+1 >= table.getHeight()) {
         table.clearCell(x,y); // pas de bords latéraux
     }

@@ -21,6 +21,7 @@ void Affichage::run(Table& table) {
     bool vide = false; // Vide activé ou non (false = non, true = oui)
     bool inertie = false; //Inertie activée ou non (false = non, true = oui)
     bool pause = false; // Pause activée ou non (false = non, true = oui)
+    int resistance = 5; // Résistance par défaut
     // Boucle principale
     while (window.isOpen()) {
         sf::Event event;
@@ -46,6 +47,16 @@ void Affichage::run(Table& table) {
             // Detecte la pression de la touche 'espace' pour activer/désactiver la pause
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
                 pause = !pause; // Active ou désactive la pause
+            }
+            // Detecte la pression de la touche 'Up' pour augmenter la résistance
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up && resistance < 10) {
+                resistance += 1; // Augmente la résistance
+                std::cout << "Résistance : " << resistance << std::endl;
+            }
+            // Detecte la pression de la touche 'Down' pour augmenter la résistance
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down && resistance > 0) {
+                resistance -= 1; // Diminue la résistance
+                std::cout << "Résistance : " << resistance << std::endl;
             }
         }
         if (pause) {
@@ -134,7 +145,6 @@ void Affichage::run(Table& table) {
 
                             int newX = gridPos.x + offsetX;
                             int newY = gridPos.y + offsetY;
-
                             // Vérifie que la position générée est dans les limites de la grille
                             if (newX >= 0 && newX < width && newY >= 0 && newY < height) {
                                 table.addSable(newX, newY);
@@ -145,7 +155,7 @@ void Affichage::run(Table& table) {
             }
 
             // Met à jour la simulation
-            table.update(vide);
+            table.update(vide, resistance);
 
             // Efface la fenêtre
             window.clear(sf::Color::Black);

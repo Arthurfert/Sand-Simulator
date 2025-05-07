@@ -7,7 +7,6 @@ class Affichage {
 public:
     Affichage(int width, int height, int cellSize); // Constructeur
     void run(Table& table); // Boucle principale pour gérer l'affichage et les interactions
-    void displayStatus(bool gomme, bool vide); // Affiche le statut de la simulation
 
 private:
     void render(Table& table); // Méthode pour dessiner la grille

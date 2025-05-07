@@ -8,7 +8,7 @@ public:
     int getY() const; // Accesseur pour y
 
     bool getM() const override;// Accesseur pour isMoving
-    void update(class Table& table, int x, int y, bool vide) override; // Ajout de override
+    void update(class Table& table, int x, int y, bool vide, int resistance) override; // Ajout de override
 
 private:
     int x; // Coordonnée x du sable

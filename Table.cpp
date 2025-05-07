@@ -42,7 +42,7 @@ void Table::moveParticle(int fromX, int fromY, int toX, int toY) {
     grid[fromY][fromX] = temp;
 }
 
-void Table::update(bool vide) {
+void Table::update(bool vide, int resistance) {
     std::random_device rd;
     std::mt19937 gen(rd());
 
@@ -57,7 +57,7 @@ void Table::update(bool vide) {
         for (int x : columns) {
             if (grid[y][x]) {
                 // Appeler la méthode update spécifique à la particule
-                grid[y][x]->update(*this, x, y, vide);
+                grid[y][x]->update(*this, x, y, vide, resistance);
             }
         }
     }
