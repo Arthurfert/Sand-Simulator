@@ -46,10 +46,10 @@ void inertiaSand::update(Table& table, int x, int y, bool vide, int resistance) 
         // Définition du test random(0,1)
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_real_distribution<> dis(0, 1);
+        std::uniform_real_distribution<> dis(0, 10);
 
         double randomValue = dis(gen);
-        double res = resistance * 0.1; // Résistance de 0 à 1
+        double res = resistance; // Résistance de 0 à 10
         // test de la résistance
         if (randomValue > res) {
             if (x > 0 && x < table.getWidth() - 1) {
